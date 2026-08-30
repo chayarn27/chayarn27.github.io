@@ -1,968 +1,462 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HR Management Dashboard</title>
-<style>
-:root{
-  --ink:#0F2137;--ink2:#41546C;--ink3:#7A8798;
-  --paper:#F2F5F8;--surface:#fff;--line:#DDE3EA;--line2:#EDF1F5;
-  --gold:#B8912A;--good:#0B7A63;--warn:#B0741A;--alert:#AE1F16;
-  --sh:0 1px 2px rgba(15,33,55,.05),0 4px 16px rgba(15,33,55,.06);--r:11px;
-}
-*{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;margin:0}
-.mono{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-numeric:tabular-nums}
-.num{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:-.02em}
-button{font-family:inherit;font-size:inherit;cursor:pointer}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-code{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11.5px;background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink2)}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-#app{max-width:1320px;margin:0 auto;padding:0 22px 60px}
-header{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:20px 0 16px}
-.brand{display:flex;align-items:center;gap:13px}
-.bm{display:flex;flex-direction:column;gap:3px}
-.bm i{width:22px;height:4px;border-radius:2px;background:var(--ink)}
-.bm i:nth-child(2){background:var(--gold);width:14px}
-.bm i:nth-child(3){width:18px;background:var(--line)}
-.brand h1{font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
-.brand span{font-size:11.5px;color:var(--ink3)}
-.hg{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.who{text-align:right;font-size:11.5px;line-height:1.45}
-.who b{display:block;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-weight:500;color:var(--ink)}
-.who span{color:var(--ink3)}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-/* NOTIFICATION */
-.notiwrap{position:relative}
-.bell{position:relative;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--ink2)}
-.bell:hover{border-color:var(--ink3);color:var(--ink)}
-.bell svg{width:17px;height:17px}
-.bell .badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--alert);color:#fff;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10.5px;font-weight:600;display:grid;place-items:center;border:2px solid var(--paper)}
-.bell .badge.q{background:var(--warn)}
-.bell .badge.z{display:none}
-.noti{display:none;position:absolute;right:0;top:46px;width:390px;max-width:calc(100vw - 44px);background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 12px 40px rgba(15,33,55,.16);z-index:30;overflow:hidden}
-.noti.on{display:block}
-.nh{display:flex;justify-content:space-between;align-items:baseline;padding:12px 15px;border-bottom:1px solid var(--line2)}
-.nh h2{font-size:13.5px;font-weight:600}
-.nh span{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11px;color:var(--ink3)}
-.nlist{max-height:390px;overflow-y:auto}
-.ni{display:flex;gap:11px;padding:12px 15px;border-bottom:1px solid var(--line2);border-left:3px solid var(--warn)}
-.ni:last-child{border-bottom:0}
-.ni.sev-high{border-left-color:var(--alert)}
-.ni.sev-good{border-left-color:var(--good)}
-.ni.sev-info{border-left-color:var(--ink3)}
-.ni .tag{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:9.5px;letter-spacing:.05em;color:var(--ink3);padding-top:3px;white-space:nowrap;width:62px;flex:none}
-.ni p{margin:0;font-size:13px;line-height:1.5}
-.ni p i{font-style:normal;display:block;color:var(--ink2);font-size:12px;margin-top:2px}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.ghost{padding:8px 13px;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--ink2);font-size:13px}
-.ghost:hover{border-color:var(--ink3);color:var(--ink)}
-.rf{display:flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:9px;font-weight:600;font-size:13px}
-.rf:hover{background:#1B3350}.rf[disabled]{opacity:.55;cursor:default}
-.rf svg{width:14px;height:14px}
-.rf.spin svg{animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.rf.spin svg{animation:none}}
+        header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
 
-.headline{background:var(--ink);color:#fff;border-radius:var(--r);padding:17px 22px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
-.headline p{margin:0;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:16.5px;font-weight:500;line-height:1.45;letter-spacing:-.01em}
-.headline p b{font-weight:700;color:#F2C94C}
-.headline .scope{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11px;color:#93A6BC;white-space:nowrap}
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
 
-.ledger{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:14px}
-.lt{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:11px 18px;border-bottom:1px solid var(--line2)}
-.lt strong{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:14px;font-weight:600}
-.lt em{font-style:normal;color:var(--ink3);font-size:12px}
-.lb{display:flex;flex-wrap:wrap}
-.lg{flex:1 1 140px;padding:10px 18px;border-right:1px solid var(--line2);min-width:0}
-.lg:last-child{border-right:0}
-.lg u{display:block;text-decoration:none;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lg b{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px}
-.dot{width:7px;height:7px;border-radius:50%;flex:none}
-.dot.ok{background:var(--good)}.dot.late{background:var(--warn)}.dot.none{background:var(--alert)}
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
 
-.filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:13px}
-.fl{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 12px}
-.fl u{text-decoration:none;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
-select{border:0;background:none;font-family:inherit;font-size:13.5px;color:var(--ink);font-weight:500;cursor:pointer;max-width:230px}
-select:focus{outline:none}
-.fl.sal input{width:78px;padding:2px 0;border:0;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:13.5px;font-weight:500;text-align:right}
-.excl{margin-left:auto;font-size:12px;color:var(--ink3)}
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #d4edda;
+            color: #155724;
+        }
 
-/* KPI */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:12px}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.grid{grid-template-columns:1fr}}
-.kpi{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 17px 14px 20px;box-shadow:var(--sh);overflow:hidden}
-.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
-.kpi.s-good::before{background:var(--good)}
-.kpi.s-watch::before{background:var(--warn)}
-.kpi.s-act::before{background:var(--alert)}
-.kpi.s-none{background:repeating-linear-gradient(135deg,#fff,#fff 9px,#FAFCFD 9px,#FAFCFD 18px)}
-.kt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.kn{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:13.5px;font-weight:600}
-.ka{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10.5px;color:var(--ink3);white-space:nowrap;background:var(--paper);padding:2px 7px;border-radius:5px}
-.kv{display:flex;align-items:flex-end;gap:7px;margin:10px 0 8px}
-.kv .num{font-size:34px;line-height:.95}
-.ku{font-size:11.5px;color:var(--ink3);padding-bottom:3px}
-.krow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;gap:5px;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px}
-.chip.g{background:#E6F2EF;color:var(--good)}
-.chip.r{background:#FBEDEC;color:var(--alert)}
-.chip.n{background:var(--paper);color:var(--ink3)}
-.chip em{font-style:normal;font-weight:400;color:var(--ink3)}
-.kprev{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11px;color:var(--ink3)}
-.ksrc{margin-top:11px;padding-top:8px;border-top:1px solid var(--line2);font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:9.5px;color:var(--ink3);display:flex;justify-content:space-between;gap:8px}
-.kempty p{margin:8px 0 11px;font-size:13px;color:var(--ink2);line-height:1.5}
-.mini{display:inline-block;padding:5px 10px;border:1px solid var(--line);border-radius:7px;font-size:12px;color:var(--ink)}
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
 
-/* TREND */
-.trend{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:15px 18px 16px;margin-bottom:12px}
-.th{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:4px}
-.th h3{font-size:14.5px;font-weight:600}
-.tabs{display:flex;gap:5px;flex-wrap:wrap}
-.tab{padding:5px 12px;border:1px solid var(--line);background:#fff;border-radius:20px;font-size:12.5px;color:var(--ink2)}
-.tab:hover{border-color:var(--ink3)}
-.tab.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
-.tab[disabled]{opacity:.4;cursor:not-allowed}
-.tsub{margin:0 0 12px;font-size:12.5px;color:var(--ink2)}
-.cols{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:190px;padding-top:22px}
-.col{display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative}
-.col .cv{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11px;font-weight:600;text-align:center;margin-bottom:5px;white-space:nowrap}
-.col .cb{border-radius:5px 5px 0 0;background:#C3CEDA;transition:height .45s cubic-bezier(.4,0,.2,1);min-height:3px}
-.col.cur .cb{background:var(--ink)}
-.col.nd .cb{background:none;border:1.5px dashed var(--line);border-bottom:0;border-radius:5px 5px 0 0}
-.col.nd .cv{color:var(--ink3);font-weight:400}
-.col .cm{text-align:center;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11px;color:var(--ink3);padding-top:7px;border-top:1px solid var(--line2);margin-top:6px}
-.col.cur .cm{color:var(--ink);font-weight:600}
-.col .cd{text-align:center;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10px;margin-top:3px}
-@media(prefers-reduced-motion:reduce){.col .cb{transition:none}}
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
 
-.row{display:grid;gap:11px;margin-bottom:11px}
-.r-3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.r-2{grid-template-columns:1.15fr 1fr}
-@media(max-width:1000px){.r-2{grid-template-columns:1fr}}
-.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:15px 18px 17px}
-.ph{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:2px}
-.ph h3{font-size:14px;font-weight:600}
-.ph span{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10px;color:var(--ink3)}
-.psub{margin:0 0 13px;font-size:12.5px;color:var(--ink2)}
+        .button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            margin-right: 10px;
+        }
 
-.bars{display:grid;gap:7px}
-/* การ์ดระดับตำแหน่งแคบกว่าการ์ดอื่น — วางชื่อ/ตัวเลขบรรทัดบน แล้วให้แท่งกินเต็มความกว้างข้างล่าง
-   ไม่ผูกกับ breakpoint ของหน้าจอ แท่งจึงไม่ถูกบีบจนหายไม่ว่าการ์ดจะกว้างเท่าไร */
-#lvlBars{gap:11px}
-#lvlBars .bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n v" "t t";gap:4px 10px}
-#lvlBars .bar u{grid-area:n}
-#lvlBars .bar .rt{grid-area:v}
-#lvlBars .bar .tr{grid-area:t;height:11px}
-#lvlBars .bar .rt s{display:none}
-.lvsrc{margin:10px 0 0;font-size:10.5px;color:var(--ink3);line-height:1.5}
-.lvnone{margin:6px 0 0;font-size:12.5px;color:var(--ink2);background:var(--paper);border-radius:8px;padding:11px 13px;line-height:1.55}
-.bar{display:grid;grid-template-columns:150px 1fr 100px;gap:10px;align-items:center}
-@media(max-width:520px){.bar{grid-template-columns:104px 1fr 78px}}
-.bar u{text-decoration:none;font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar .tr{height:17px;background:var(--paper);border-radius:4px;overflow:hidden}
-.bar .fi{height:100%;background:var(--ink);border-radius:4px;transition:width .45s cubic-bezier(.4,0,.2,1)}
-.bar.hot .fi{background:var(--alert)}.bar.warm .fi{background:var(--warn)}
-.bar .rt{font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:11.5px;text-align:right;display:flex;gap:6px;justify-content:flex-end;align-items:baseline}
-.bar .rt b{font-weight:600}
-.bar .rt s{text-decoration:none;font-size:10px}
-.up{color:var(--alert)}.dn{color:var(--good)}.fl0{color:var(--ink3)}
-@media(prefers-reduced-motion:reduce){.bar .fi{transition:none}}
+        .button:hover {
+            background: #764ba2;
+        }
 
-.dwrap{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;max-width:430px;margin:0 auto}
-.dlab{display:grid;gap:9px;flex:1 1 150px;max-width:270px;min-width:140px}
-.dl{display:flex;align-items:center;gap:8px;font-size:12.5px}
-.dl i{width:10px;height:10px;border-radius:3px;flex:none}
-.dl b{margin-left:auto;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:12px;font-weight:600}
-.dl s{text-decoration:none;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10px;color:var(--ink3)}
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
 
-.gauge{display:flex;flex-wrap:wrap;gap:24px;align-items:center}
-.gnum{flex:none}
-.gnum .num{font-size:44px;line-height:1}
-.gnum .lbl{font-size:12px;color:var(--ink2);margin-top:4px}
-.gtrack{flex:1;min-width:240px}
-.gt{position:relative;height:30px;background:var(--paper);border-radius:6px;overflow:hidden}
-.gt .fill{height:100%;background:var(--good);border-radius:6px;transition:width .5s}
-.gt.over .fill{background:var(--alert)}
-.gt .limit{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
-.gscale{display:flex;justify-content:space-between;margin-top:6px;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-size:10.5px;color:var(--ink3)}
-.gverdict{margin-top:11px;font-size:13px;padding:9px 13px;border-radius:8px}
-.gverdict.ok{background:#E6F2EF;color:var(--good)}
-.gverdict.no{background:#FBEDEC;color:var(--alert)}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
 
-/* Group insurance monitor */
-.tabs.vw{margin-left:auto}
-.tabs.vw .tab{font-weight:600}
-.gi{margin-bottom:11px}
-.giin{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:15px}
-.giin .fl{margin:0}
-.giin input[type=number]{width:118px;padding:2px 0;border:0;font-family:Tahoma,"Segoe UI","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-numeric:tabular-nums;font-size:13.5px;font-weight:500;text-align:right;background:none;color:var(--ink)}
-.giin .fl span{font-size:12px;color:var(--ink3)}
-.gislide input[type=range]{width:150px;accent-color:var(--gold)}
-.gislide b{font-size:13px;min-width:38px;text-align:right}
-.gt .fill.act{position:absolute;left:0;top:0;background:var(--ink);opacity:.85;z-index:1}
-.gt .limit{z-index:2}
-.gikey{margin:7px 0 0;font-size:10.5px;color:var(--ink3);display:flex;gap:14px;align-items:center}
-.gikey .sw{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}
-.gikey .sw.act{background:var(--ink)}
-.gikey .sw.prj{background:var(--good)}
-.gigrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:14px}
-@media(max-width:860px){.gigrid{grid-template-columns:repeat(2,1fr)}}
-.gistat{background:var(--paper);border-radius:9px;padding:11px 13px}
-.gistat u{display:block;text-decoration:none;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
-.gistat b{display:block;font-variant-numeric:tabular-nums;font-size:18px;font-weight:700;letter-spacing:-.02em}
-.gistat s{display:block;text-decoration:none;font-size:11px;color:var(--ink2);margin-top:2px;line-height:1.4}
-.snaps{margin-top:16px;border-top:1px solid var(--line2);padding-top:13px}
-.snaps .ph h3{font-size:13px}
-.snaprow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
-.snap{background:var(--paper);border-radius:9px;padding:10px 12px}
-.snap u{display:block;text-decoration:none;font-size:10.5px;color:var(--ink3);margin-bottom:5px}
-.snap .lrv{font-variant-numeric:tabular-nums;font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:baseline;gap:7px}
-.snap .lrv em{font-style:normal;font-size:11px;font-weight:600}
-.snap .mini{height:6px;background:#E3E8EE;border-radius:3px;overflow:hidden;margin-top:7px}
-.snap .mini i{display:block;height:100%;border-radius:3px}
-.snap s{display:block;text-decoration:none;font-size:11px;color:var(--ink2);margin-top:6px;line-height:1.45}
-.sens{margin-top:18px;border-top:1px solid var(--line2);padding-top:14px}
-.sens .ph h3{font-size:13px}
-.senwrap{overflow-x:auto;margin-top:10px}
-.sens table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
-.sens th,.sens td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line2);white-space:nowrap;font-variant-numeric:tabular-nums}
-.sens th{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:500;border-bottom:1px solid var(--line)}
-.sens th:first-child,.sens td:first-child{text-align:left}
-.sens tr.now{background:#FFFBEF}
-.sens tr.now td:first-child{font-weight:700}
-.sens td.lr{font-weight:600}
-.sens td.lr.ok{color:var(--good)}
-.sens td.lr.warn{color:var(--warn)}
-.sens td.lr.no{color:var(--alert)}
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
 
-footer{margin-top:20px;padding-top:15px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:11.5px;color:var(--ink3)}
-.pdpa{display:inline-flex;align-items:center;gap:7px}
-.pdpa .dot{background:var(--good)}
-</style>
+        .card h2 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .metric {
+            margin-bottom: 15px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .metric-unit {
+            font-size: 12px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .table-container h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #333;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #721c24;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #155724;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <div class="brand"><div class="bm"><i></i><i></i><i></i></div>
-      <div><h1>👥 HR Management Dashboard</h1><span>ภาพรวมกำลังพลและสวัสดิการ · 6 KPIs</span></div></div>
-    <div class="hg">
-      <div class="notiwrap">
-        <button class="bell" id="bell" aria-label="การแจ้งเตือน">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-          <span class="badge z" id="badge">0</span>
-        </button>
-        <div class="noti" id="noti">
-          <div class="nh"><h2>🔔 ต้องดูก่อน</h2><span id="nCount">—</span></div>
-          <div class="nlist" id="nlist"></div>
+    <div class="container">
+        <header>
+            <h1>👥 HR Management Dashboard</h1>
+            <p class="subtitle">ภาพรวมกำลังพลและสวัสดิการ · เชื่อมต่อกับ Google Sheets</p>
+            <span class="status" id="status">🔄 กำลังโหลดข้อมูล...</span>
+            <button class="button" id="refreshBtn" onclick="refreshData()">🔄 ซิงค์ข้อมูลใหม่</button>
+        </header>
+
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>กำลังดึงข้อมูลจาก Google Sheets...</p>
+            </div>
         </div>
-      </div>
-      <button class="rf" id="rf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfTxt">🔄 ดึงข้อมูลล่าสุด</span></button>
-    </div>
-  </header>
 
-  <div class="headline"><p id="hlText">—</p><span class="scope" id="hlScope">—</span></div>
-
-  <section class="ledger">
-    <div class="lt"><strong>📅 ข้อมูลที่กำลังดูอยู่ — แต่ละ KPI อัปเดตไม่พร้อมกัน</strong>
-      <em>ทุกแหล่งส่งช้ากว่าปัจจุบัน 1 เดือนตามรอบที่ตกลงไว้ · ดึงล่าสุด <span class="mono" id="pulled">—</span></em></div>
-    <div class="lb" id="ledger"></div>
-  </section>
-
-  <div class="filters">
-    <div class="fl"><u>📆 เดือน</u><select id="fMonth"></select></div>
-    <div class="fl"><u>🏢 หน่วยงาน</u><select id="fBU"></select></div>
-    <div class="fl"><u>👥 แผนก</u><select id="fDept"></select></div>
-    <div class="fl sal"><u>💰 ฐานเงินเดือนเฉลี่ย/คน</u><input type="number" id="fSal" value="35000" step="1000" min="1000"><span style="font-size:12px;color:var(--ink3)">บาท</span></div>
-    <div class="excl">ไม่รวมบริษัท <code>HI</code></div>
-  </div>
-
-  <section class="grid" id="kpis"></section>
-
-  <section class="trend">
-    <div class="th"><h3>📈 ย้อนหลัง 7 เดือน</h3><div class="tabs" id="tabs"></div>
-      <div class="tabs vw" id="vmode"><button class="tab on" data-v="mo">รายเดือน</button><button class="tab" data-v="cum">สะสม</button></div></div>
-    <p class="tsub" id="tSub">—</p>
-    <div class="cols" id="cols"></div>
-  </section>
-
-  <div class="row">
-    <div class="panel">
-      <div class="ph"><h3>⏱️ OT อยู่ในเส้นควบคุมไหม</h3><span id="otAs">—</span></div>
-      <p class="psub">เกณฑ์ที่ตกลงไว้: ค่า OT ต้องไม่เกิน <b>5% ของฐานเงินเดือนรวมต่อเดือน</b></p>
-      <div class="gauge">
-        <div class="gnum"><div class="num" id="otPct">—</div><div class="lbl">ของฐานเงินเดือนรวม</div></div>
-        <div class="gtrack"><div class="gt" id="otTrack"><div class="fill" id="otFill" style="width:0"></div><div class="limit" id="otLimit"></div></div>
-          <div class="gscale"><span>0%</span><span id="otLimLbl">เส้นควบคุม 5%</span><span>10%</span></div></div>
-      </div>
-      <div class="gverdict" id="otVerdict">—</div>
-    </div>
-  </div>
-
-  <section class="panel gi">
-    <div class="ph"><h3>🏥 Group Insurance — คุม Loss Ratio</h3><span id="giAs">—</span></div>
-    <p class="psub">ยอดเคลม<b>สะสมทั้งปีกรมธรรม์</b>ต้องไม่เกิน Target Loss Ratio ของเบี้ยประกัน · ปรับสมมติฐานเพื่อดูว่าอะไรทำให้ทะลุเพดาน</p>
-
-    <div class="giin">
-      <label class="fl"><u>💵 เบี้ยประกันทั้งปี</u><input type="number" id="giPrem" value="20976700" step="100000" min="1000000"><span>บาท</span></label>
-      <label class="fl"><u>🎯 target loss ratio</u><input type="number" id="giTgt" value="70" step="1" min="1" max="200"><span>%</span></label>
-      <label class="fl gislide"><u>📈 อัตราเคลมเทียบของจริง</u><input type="range" id="giFac" min="0.5" max="8" step="0.1" value="1"><b class="mono" id="giFacL">×1.0</b></label>
-      <button class="ghost" id="giReset" type="button">คืนค่าจากไฟล์</button>
+        <div class="footer">
+            <p>🔒 ข้อมูลนี้เป็นความลับของบริษัท ไม่มีข้อมูลรายบุคคล (PDPA)</p>
+            <p style="margin-top: 10px; font-size: 12px;">HR Dashboard v2.0 • Hosted on GitHub Pages</p>
+        </div>
     </div>
 
-    <div class="gauge">
-      <div class="gnum"><div class="num" id="giLR">—</div><div class="lbl">loss ratio คาดการณ์<br>ณ สิ้นปีกรมธรรม์</div></div>
-      <div class="gtrack">
-        <div class="gt" id="giTrack"><div class="fill" id="giFill" style="width:0"></div><div class="fill act" id="giAct" style="width:0"></div><div class="limit" id="giLimit"></div></div>
-        <div class="gscale"><span>0%</span><span id="giTgtL">target 70%</span><span>100%</span></div>
-        <p class="gikey"><i class="sw act"></i>เคลมจริงถึงวันนี้ <i class="sw prj"></i>ส่วนที่คาดการณ์เพิ่มจนจบปี</p>
-      </div>
-    </div>
-    <div class="gverdict" id="giVerdict">—</div>
+    <script>
+        // Google Sheets IDs
+        const SHEETS = {
+            headcount: '187MfSIoLhebG24ZJUOAIW_54iEC-VpHtv4MhT-wMjIQ',
+            master_emp: '17Lkdf2TqYKE4YICDJBB_VIXZr_N5o35TqFe8adiU--s',
+            flex: '1ih9JTGkSyLsZvp43Ry8DGHYNHPQIna2Yzp_6hLO2lFQ',
+            ot: '1SJK0KhDllw_jwcsR_NBbsn8hIBUhBq-CjGGqbRNbtoI',
+            insurance: '10Dd-NaaDMdjcGCPKaZn9DlRbW8YiS0eJVOXQ7cLNjzQ',
+            flex2: '1tf1NMtjCoWhG2m7DpG6yYDjgzVQOIkcfOSe8s7niaFE',
+            absenteeism: '1GVEwpdSvc6xgZ79kSNgQ9Y2w70tk4TFeqi4ijrGw8Xs'
+        };
 
-    <div class="gigrid">
-      <div class="gistat"><u>เคลมสะสมจริง</u><b id="giCum">—</b><s id="giCumS">—</s></div>
-      <div class="gistat"><u>เพดานทั้งปี</u><b id="giCap">—</b><s id="giCapS">—</s></div>
-      <div class="gistat"><u>คาดการณ์ทั้งปี</u><b id="giProj">—</b><s id="giProjS">—</s></div>
-      <div class="gistat"><u>ระยะห่างจากเพดาน</u><b id="giBreak">—</b><s id="giBreakS">—</s></div>
-    </div>
+        // ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        async function fetchSheetData(sheetId, sheetName = 'Sheet1') {
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+                const response = await fetch(url);
+                const text = await response.text();
+                
+                // ลบ Google Visualization prefix
+                const jsonData = text.substring(47);
+                const jsonDataEnd = jsonData.substring(0, jsonData.length - 2);
+                const data = JSON.parse(jsonDataEnd);
+                
+                return data;
+            } catch (error) {
+                console.error(`Error fetching sheet ${sheetId}:`, error);
+                return null;
+            }
+        }
 
-    <div class="snaps">
-      <div class="ph"><h3>Loss ratio ทุกรอบรายงาน</h3><span>ยอดสะสมจากต้นปีกรมธรรม์</span></div>
-      <div class="snaprow" id="snapRow"></div>
-    </div>
+        // ฟังก์ชันแปลงข้อมูลจาก Google Visualization format
+        function parseGoogleData(data) {
+            if (!data || !data.table) return [];
+            
+            const rows = [];
+            const headers = [];
+            
+            // Get headers
+            if (data.table.cols) {
+                headers.push(...data.table.cols.map(col => col.label));
+            }
+            
+            // Get rows
+            if (data.table.rows) {
+                data.table.rows.forEach(row => {
+                    const rowData = {};
+                    row.c.forEach((cell, idx) => {
+                        rowData[headers[idx]] = cell ? cell.v : null;
+                    });
+                    rows.push(rowData);
+                });
+            }
+            
+            return rows;
+        }
 
-    <div class="sens">
-      <div class="ph"><h3>ตารางความไว</h3><span id="sensSub">—</span></div>
-      <div class="senwrap"><table id="sensT"></table></div>
-    </div>
-    <p class="lvsrc" id="giSrc"></p>
-  </section>
+        // ฟังก์ชันสร้าง UI
+        async function refreshData() {
+            const contentDiv = document.getElementById('content');
+            const statusDiv = document.getElementById('status');
+            const refreshBtn = document.getElementById('refreshBtn');
+            
+            statusDiv.textContent = '🔄 กำลังโหลด...';
+            statusDiv.className = 'status loading';
+            refreshBtn.disabled = true;
+            
+            contentDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>กำลังดึงข้อมูลจาก Google Sheets...</p>
+                </div>
+            `;
 
-  <div class="row r-3">
-    <div class="panel"><div class="ph"><h3>🚻 ชาย–หญิง</h3><span class="mono" id="gTot">—</span></div>
-      <p class="psub">สัดส่วนพนักงานตามเพศ</p>
-      <div class="dwrap"><svg id="dGender" width="118" height="118" viewBox="0 0 118 118"></svg><div class="dlab" id="lGender"></div></div></div>
-    <div class="panel"><div class="ph"><h3>📝 ประเภทการจ้าง</h3><span class="mono" id="tTot">—</span></div>
-      <p class="psub">Permanent เทียบ Contractor</p>
-      <div class="dwrap"><svg id="dType" width="118" height="118" viewBox="0 0 118 118"></svg><div class="dlab" id="lType"></div></div></div>
-    <div class="panel"><div class="ph"><h3>🎖️ ระดับตำแหน่ง</h3><span class="mono" id="lvTot">—</span></div>
-      <p class="psub" id="lvSub">โครงสร้างชั้นบังคับบัญชา</p><div class="bars" id="lvlBars"></div><p class="lvsrc" id="lvSrc"></p></div>
-  </div>
+            try {
+                // ดึงข้อมูลจากทั้ง 7 sheets
+                const [headcountData, empData, flexData, otData, insuranceData, flex2Data, absenteeismData] = await Promise.all([
+                    fetchSheetData(SHEETS.headcount),
+                    fetchSheetData(SHEETS.master_emp),
+                    fetchSheetData(SHEETS.flex),
+                    fetchSheetData(SHEETS.ot),
+                    fetchSheetData(SHEETS.insurance),
+                    fetchSheetData(SHEETS.flex2),
+                    fetchSheetData(SHEETS.absenteeism)
+                ]);
 
-  <div class="row r-2">
-    <div class="panel"><div class="ph"><h3 id="hcTitle">🏢 อัตรากำลัง</h3><span id="hcAs">—</span></div>
-      <p class="psub">จำนวนคน และ %เปลี่ยนแปลงจากเดือนก่อน (MoM)</p><div class="bars" id="hcBars"></div></div>
-    <div class="panel"><div class="ph"><h3 id="toTitle">🚪 อัตราการลาออก</h3><span id="toAs">—</span></div>
-      <p class="psub">% ต่อเดือน — แดงคือสูงกว่าค่าเฉลี่ยองค์กร 2 เท่า</p><div class="bars" id="toBars"></div></div>
-  </div>
+                // แปลงข้อมูล
+                const headcount = parseGoogleData(headcountData);
+                const employees = parseGoogleData(empData);
+                const flex = parseGoogleData(flexData);
+                const ot = parseGoogleData(otData);
+                const insurance = parseGoogleData(insuranceData);
+                const flex2 = parseGoogleData(flex2Data);
+                const absenteeism = parseGoogleData(absenteeismData);
 
-  <footer>
-    <span class="pdpa"><i class="dot ok"></i>🔒 แสดงเฉพาะภาพรวม ไม่มีข้อมูลรายบุคคล (PDPA)</span>
-    <span class="mono" id="recCount">—</span>
-  </footer>
-</div>
+                // สร้าง HTML
+                let html = '';
 
-<script>
-function seed(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
-const MONTHS=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค."],NM=7;
+                // KPI Cards
+                html += '<div class="grid">';
+                html += createMetricCard('👥 จำนวนพนักงาน', headcount.length, 'คน');
+                html += createMetricCard('📊 ข้อมูลพนักงาน', employees.length, 'รายการ');
+                html += createMetricCard('🎁 Flex Benefit', flex.length, 'รายการ');
+                html += createMetricCard('⏱️ ค่า OT', ot.length, 'รายการ');
+                html += '</div>';
 
-/* ═══ ข้อมูลจริง ═══════════════════════════════════════════════════════════════
-   BUD   : อัตรากำลังตามงบ — "Dept Map กับ budget.xlsx" Sheet1 คอลัมน์ A (Business Unit),
-           B (Department), D:J (Jan–Jul 2026) · แถวดิบหลายแถวที่ B เดียวกันถูกรวมยอดแล้ว
-   LVL   : คนที่มีอยู่จริงแยกตามระดับตำแหน่ง — "02 Master_Emp.xlsx" sheet All Emp.
-           นับเฉพาะ Status = Active จากคอลัมน์ Level (1.x/2.x/3/4/5/6–9)
-   LINK  : จับคู่ budget ↔ actual ตาม "Matching Budget&Actual Dept.xlsx" sheet Matching
-           (คอลัมน์ D = Yes) เสริมด้วยชื่อที่ตรงกันในคอลัมน์ B ของ Sheet1
-   ตัวเลข resign / OT / Flex / Claim ยังเป็นค่าจำลอง รอไฟล์ master ตัวจริง            */
-const BUDSRC="Dept Map กับ budget.xlsx · Sheet1 (A,B)";
-const LVSRC="02 Master_Emp.xlsx · sheet All Emp. · Status = Active";
-const BULABEL={GSV:"Combat Sport (GSV)",No:"ยังไม่ระบุหน่วยงาน"};
-const DEPTLABEL={"GSV|GSV":"Combat Sport (ทั้ง BU)","No|No":"Bright Sky (ยังไม่ลงหน่วยงาน)"};
-const BUD=[
- ["Client Facing","CXM",[17,17,17,17,17,17,16]],
- ["Client Facing","Client Service",[37,37,37,37,33,33,36]],
- ["Client Facing","Customer & Product Intelligence",[7,6,9,9,9,9,9]],
- ["Client Facing","IBD",[4,4,4,4,5,5,5]],
- ["Client Facing","Performance Marketing",[3,2,2,2,2,2,2]],
- ["Client Facing","Sales",[61,61,63,63,62,62,63]],
- ["Client Facing","Sunbeam",[26,26,27,26,25,24,31]],
- ["Client Facing","TPC",[4,4,4,4,4,4,4]],
- ["Client Facing","VM",[11,10,11,11,9,9,9]],
- ["Corporate Service","Accounting & Finance",[62,62,62,62,58,58,59]],
- ["Corporate Service","CEO Office",[6,5,5,4,5,5,5]],
- ["Corporate Service","Executive Office",[1,1,1,1,1,1,1]],
- ["Corporate Service","IR & ComSec",[4,4,4,4,4,4,4]],
- ["Corporate Service","IT",[17,18,18,19,17,17,20]],
- ["Corporate Service","Legal",[8,8,9,9,8,8,10]],
- ["Corporate Service","People",[37,43,40,37,35,35,37]],
- ["Corporate Service","Purchasing",[14,14,14,11,11,11,12]],
- ["Corporate Service","SBT",[5,5,5,5,5,5,5]],
- ["GSV","GSV",[78,78,81,82,82,82,86]],
- ["New Business","Entertainment Business",[17,17,17,18,18,18,16]],
- ["No","No",[0,0,0,0,0,0,16]],
- ["Operation","AI Strategic Initiative",[0,0,0,2,2,2,8]],
- ["Operation","Airport & Seven-Eleven Media",[90,91,90,90,89,86,93]],
- ["Operation","BD & Asset Management",[31,31,31,32,30,29,29]],
- ["Operation","Billboard",[46,46,46,46,46,46,46]],
- ["Operation","Construction",[4,4,4,4,4,4,4]],
- ["Operation","Digital",[253,253,253,252,249,247,259]],
- ["Operation","Operation Support",[4,4,4,4,4,4,4]],
- ["Operation","Operational Intelligence",[3,3,3,3,3,3,3]],
- ["Operation","Street",[95,96,97,96,95,95,95]],
- ["Sports Business","E-Sport",[16,18,17,16,16,16,16]],
- ["Sports Business","Government Relations",[8,8,8,7,8,8,8]],
- ["Sports Business","Sport+AM",[15,17,19,17,16,17,16]],
- ["Sports Business","Sports - Football",[76,81,82,87,76,76,78]],
- ["Sports Business","T-Sport",[16,16,16,16,16,16,16]]
-];
-const LVL={
- "Client Facing|Client Service":[28,2,2,0,0,0],
- "Client Facing|Customer & Product Intelligence":[2,4,1,2,1,0],
- "Client Facing|Customer Experience & Marketing Strategy":[6,4,3,1,1,0],
- "Client Facing|International Business Development":[1,0,1,1,0,0],
- "Client Facing|Performance Marketing":[1,1,0,0,0,0],
- "Client Facing|Sales":[18,31,3,5,1,0],
- "Client Facing|Sunbeam":[11,9,3,1,0,0],
- "Client Facing|Thailand Privilege Card":[1,1,1,1,0,0],
- "Client Facing|Value Management":[1,5,0,2,0,1],
- "Combat Sport|Brand & Marketing":[2,2,1,0,0,0],
- "Combat Sport|CEO Office":[0,1,0,0,0,2],
- "Combat Sport|Commercial & Sponsorship":[1,2,0,0,0,0],
- "Combat Sport|Corporate Strategy":[7,4,0,0,1,0],
- "Combat Sport|Destination":[3,2,1,1,0,0],
- "Combat Sport|International Commercial":[0,0,0,0,1,0],
- "Combat Sport|Production":[15,6,3,1,0,0],
- "Combat Sport|Program Director":[4,2,2,1,0,0],
- "Combat Sport|Sport Marketing":[3,1,0,0,0,0],
- "Corporate Service|Accounting & Finance":[30,20,8,3,3,1],
- "Corporate Service|CEO Office":[0,2,0,1,1,0],
- "Corporate Service|Executive Office (IR & ComSec)":[0,1,2,0,0,1],
- "Corporate Service|Executive Office (SBT)":[2,3,0,0,0,0],
- "Corporate Service|Information Technology":[8,9,1,1,0,0],
- "Corporate Service|Legal":[0,4,2,1,1,0],
- "Corporate Service|People - Admin":[19,3,0,0,0,0],
- "Corporate Service|People - HR":[0,7,6,0,0,1],
- "Corporate Service|People - Holding":[2,0,1,0,0,0],
- "Corporate Service|Purchasing":[6,4,0,1,0,0],
- "Management|Corporate":[0,0,0,0,0,2],
- "New Business|Entertainment Business":[2,5,3,3,0,1],
- "New Business|Supplement":[3,1,0,0,0,0],
- "Operation|AI Strategic Initiative":[3,2,2,0,0,0],
- "Operation|Airport & Seven-Eleven Media":[75,6,4,0,0,0],
- "Operation|BD & Asset Management":[11,8,6,3,2,0],
- "Operation|Billboard":[28,10,2,2,0,1],
- "Operation|Construction":[0,3,1,0,0,1],
- "Operation|Content Management":[0,1,0,0,0,0],
- "Operation|Digital":[194,39,7,2,1,0],
- "Operation|Operation":[0,0,0,0,0,1],
- "Operation|Operational Intelligence":[2,3,0,1,0,0],
- "Operation|Street":[73,13,3,1,0,0],
- "Sports Business|E-Sport":[9,5,2,0,0,0],
- "Sports Business|Sports - Account Management":[3,6,0,0,0,0],
- "Sports Business|Sports - Football":[7,15,8,1,0,1],
- "Sports Business|Sports - Government Relations":[2,4,0,2,0,0],
- "Sports Business|Sports - Sales":[2,3,0,0,0,0],
- "Sports Business|Sports Media & Communications":[22,13,2,1,0,0],
- "Sports Business|T-Sport":[8,6,1,1,0,0]
-};
-const LINK={
- "Client Facing|CXM":["Client Facing|Customer Experience & Marketing Strategy"],
- "Client Facing|Client Service":["Client Facing|Client Service"],
- "Client Facing|Customer & Product Intelligence":["Client Facing|Customer & Product Intelligence"],
- "Client Facing|IBD":["Client Facing|International Business Development"],
- "Client Facing|Performance Marketing":["Client Facing|Performance Marketing"],
- "Client Facing|Sales":["Client Facing|Sales"],
- "Client Facing|Sunbeam":["Client Facing|Sunbeam"],
- "Client Facing|TPC":["Client Facing|Thailand Privilege Card"],
- "Client Facing|VM":["Client Facing|Value Management"],
- "Corporate Service|Accounting & Finance":["Corporate Service|Accounting & Finance"],
- "Corporate Service|CEO Office":["Corporate Service|CEO Office"],
- "Corporate Service|IR & ComSec":["Corporate Service|Executive Office (IR & ComSec)"],
- "Corporate Service|IT":["Corporate Service|Information Technology"],
- "Corporate Service|Legal":["Corporate Service|Legal"],
- "Corporate Service|People":["Corporate Service|People - Admin","Corporate Service|People - HR","Corporate Service|People - Holding"],
- "Corporate Service|Purchasing":["Corporate Service|Purchasing"],
- "Corporate Service|SBT":["Corporate Service|Executive Office (SBT)"],
- "GSV|GSV":["Combat Sport|CEO Office","Combat Sport|Production","Combat Sport|Brand & Marketing","Combat Sport|Destination","Combat Sport|Program Director","Combat Sport|Sport Marketing","Combat Sport|Corporate Strategy","Combat Sport|Commercial & Sponsorship","Combat Sport|International Commercial"],
- "New Business|Entertainment Business":["New Business|Entertainment Business"],
- "Operation|AI Strategic Initiative":["Operation|AI Strategic Initiative"],
- "Operation|Airport & Seven-Eleven Media":["Operation|Airport & Seven-Eleven Media"],
- "Operation|BD & Asset Management":["Operation|BD & Asset Management"],
- "Operation|Billboard":["Operation|Billboard"],
- "Operation|Construction":["Operation|Construction"],
- "Operation|Digital":["Operation|Digital"],
- "Operation|Operation Support":["Operation|Operation"],
- "Operation|Operational Intelligence":["Operation|Operational Intelligence"],
- "Operation|Street":["Operation|Street"],
- "Sports Business|E-Sport":["Sports Business|E-Sport"],
- "Sports Business|Government Relations":["Sports Business|Sports - Government Relations"],
- "Sports Business|Sport+AM":["Sports Business|Sports - Account Management","Sports Business|Sports - Sales"],
- "Sports Business|Sports - Football":["Sports Business|Sports - Football"],
- "Sports Business|T-Sport":["Sports Business|T-Sport"]
-};
-/* แผนกที่มีคนจริงแต่ยังไม่มีแถว budget — แสดงแยก ไม่ยัดรวมกับแผนกอื่น */
-const ORPHAN=["Management|Corporate","New Business|Supplement","Operation|Content Management","Sports Business|Sports Media & Communications"];
+                // Tables
+                if (headcount.length > 0) {
+                    html += createTable('📅 ข้อมูลอัตรากำลัง (Headcount)', headcount);
+                }
+                if (employees.length > 0) {
+                    html += createTable('👤 ข้อมูลพนักงาน (Master Emp)', employees);
+                }
+                if (flex.length > 0) {
+                    html += createTable('🎁 Flex Benefit', flex);
+                }
+                if (ot.length > 0) {
+                    html += createTable('⏱️ ค่า OT', ot);
+                }
+                if (insurance.length > 0) {
+                    html += createTable('🏥 ประกันสุขภาพ (Insurance)', insurance);
+                }
 
+                contentDiv.innerHTML = html;
+                statusDiv.textContent = '✅ เชื่อมต่อสำเร็จ';
+                statusDiv.className = 'status';
 
-/* ═══ Group Insurance ═══════════════════════════════════════════════════════
-   จาก "07 Health_Claims_Track_Sheet__2026  as of July.xlsx" (ฉบับล่าสุด 4 ส.ค. 2569)
-   ขอบเขต = PB Group เท่านั้น ไม่รวม Hello — ไฟล์ตัด Hello ออกจากการติดตามตั้งแต่ ก.ค. 2569
-   เบี้ยประกันทั้งปีของ PB Group = 20,976,700 บาท · Target Loss Ratio ไม่เกิน 70%
-   ปีกรมธรรม์ 12 เม.ย. 2569 – 11 เม.ย. 2570                                          */
-const GI={
-  premFile:20976700, tgtFile:.70,
-  policy:"12 เม.ย. 2569 – 11 เม.ย. 2570",
-  scope:"PB Group (ไม่รวม Hello)",
-  /* แต่ละแถวคือรอบรายงานหนึ่งเดือน — ยอดเป็นแบบสะสมตั้งแต่ต้นปีกรมธรรม์ */
-  snaps:[
-    {asof:"31 พ.ค. 2569",mi:4,cases:161, amount:331553.29,  earned:2816050.14},
-    {asof:"30 มิ.ย. 2569",mi:5,cases:561, amount:1305572.25, earned:4540162.47},
-    {asof:"31 ก.ค. 2569",mi:6,cases:1558,amount:3357333.42, earned:6321745.21}
-  ],
-  src:"07 Health_Claims_Track_Sheet__2026  as of July.xlsx"
-};
-GI.last=GI.snaps[GI.snaps.length-1];
-GI.asof=GI.last.asof;
-GI.amount=GI.last.amount;
-GI.nClaims=GI.last.cases;
-/* สัดส่วนของปีกรมธรรม์ที่ผ่านไป — คิดจาก earned premium ของไฟล์เอง */
-GI.frac=GI.last.earned/GI.premFile;
-GI.days=Math.round(GI.frac*365);
-/* คาดการณ์ทั้งปีแบบยืดอัตราเฉลี่ยสะสม */
-GI.annual=GI.amount/GI.frac;
-/* คาดการณ์ทั้งปีแบบใช้อัตราของเดือนล่าสุดอย่างเดียว (เคลมกำลังเร่งตัว) */
-GI.lastMo=GI.last.amount-(GI.snaps.length>1?GI.snaps[GI.snaps.length-2].amount:0);
-GI.annualLast=GI.lastMo*12;
+            } catch (error) {
+                console.error('Error:', error);
+                contentDiv.innerHTML = `
+                    <div class="error-message">
+                        ❌ ไม่สามารถดึงข้อมูลได้ - ${error.message}
+                    </div>
+                `;
+                statusDiv.textContent = '❌ เกิดข้อผิดพลาด';
+                statusDiv.className = 'status error';
+            }
 
+            refreshBtn.disabled = false;
+        }
 
-/* เคลมรายเดือนรายแผนก — sheet RawData_ExclHello_Jul26 (1,558 เคส)
-   จัดกลุ่มด้วย register_month (เดือนที่ประกันบันทึกเคลม) ยอดสะสมจึงตรงกับ Track Sheet ทุกแถว
-   จับคู่ employee_id ↔ Staff Code ใน Master_Emp ได้ 1,405 เคส (90.2%)
-   ที่เหลือเป็นพนักงานบริษัทในเครือที่ไม่อยู่ใน Master_Emp เก็บใน CLMUNM แยกต่างหาก      */
-const CLM={
- "Client Facing|Client Service":[null,null,null,null,13112,27254.78,46415.3],
- "Client Facing|Customer & Product Intelligence":[null,null,null,null,1200,9954,3114],
- "Client Facing|Customer Experience & Marketing Strategy":[null,null,null,null,2805,11339,21463.07],
- "Client Facing|International Business Development":[null,null,null,null,4122,null,36446.1],
- "Client Facing|Sales":[null,null,null,null,10677,64126.47,97262.31],
- "Client Facing|Sunbeam":[null,null,null,null,8005,18481.78,34136.4],
- "Client Facing|Thailand Privilege Card":[null,null,null,null,1170,4400,3600],
- "Client Facing|Value Management":[null,null,null,null,null,7549.78,12506],
- "Combat Sport|Brand & Marketing":[null,null,null,null,null,null,1100],
- "Combat Sport|CEO Office":[null,null,null,null,null,null,1883.33],
- "Combat Sport|Commercial & Sponsorship":[null,null,null,null,null,1874,2350],
- "Combat Sport|Corporate Strategy":[null,null,null,null,null,6853,6183],
- "Combat Sport|Destination":[null,null,null,null,3335,9913.2,5118],
- "Combat Sport|Production":[null,null,null,null,9280,11541.21,18854],
- "Combat Sport|Program Director":[null,null,null,null,null,1571,1100],
- "Combat Sport|Sport Marketing":[null,null,null,null,null,1965,550],
- "Corporate Service|Accounting & Finance":[null,null,null,1800,21302.2,88779.89,164949.03],
- "Corporate Service|Executive Office (IR & ComSec)":[null,null,null,null,null,12000,1931],
- "Corporate Service|Executive Office (SBT)":[null,null,null,null,7235,3653,6639.75],
- "Corporate Service|Information Technology":[null,null,null,null,null,6592,11187],
- "Corporate Service|Legal":[null,null,null,null,5254,15160,17307.56],
- "Corporate Service|People - Admin":[null,null,null,null,4955,11245,33343.11],
- "Corporate Service|People - HR":[null,null,null,null,4765.7,27219,28025.2],
- "Corporate Service|People - Holding":[null,null,null,null,null,550,null],
- "Corporate Service|Purchasing":[null,null,null,null,6925,8536,7730],
- "New Business|Entertainment Business":[null,null,null,null,1994,8391.5,18162.69],
- "Operation|AI Strategic Initiative":[null,null,null,null,null,3580,9525],
- "Operation|Airport & Seven-Eleven Media":[null,null,null,null,18089,87055.49,142318.87],
- "Operation|BD & Asset Management":[null,null,null,250,11995,17220.99,64493.63],
- "Operation|Billboard":[null,null,null,null,18914.96,38884.77,79204.22],
- "Operation|Construction":[null,null,null,null,null,76248,7672.44],
- "Operation|Digital":[null,null,null,null,46548.2,159978.02,636060.41],
- "Operation|Operation":[null,null,null,null,1941,49201.7,2811],
- "Operation|Operational Intelligence":[null,null,null,null,null,8483,10963.46],
- "Operation|Street":[null,null,null,null,24180.4,31385.83,221894],
- "Sports Business|E-Sport":[null,null,null,null,null,4968,14665],
- "Sports Business|Sports - Account Management":[null,null,null,null,2890,5031,1100],
- "Sports Business|Sports - Football":[null,null,null,null,5580,10850,25803.89],
- "Sports Business|Sports - Government Relations":[null,null,null,null,3799,4219,24695],
- "Sports Business|Sports - Sales":[null,null,null,null,1887,4680,7950],
- "Sports Business|Sports Media & Communications":[null,null,null,null,9038,20258.89,38177.17],
- "Sports Business|T-Sport":[null,null,null,null,3713,5658.67,22629.33]
-};
-const CLMC={
- "Client Facing|Client Service":[null,null,null,null,8,17,25],
- "Client Facing|Customer & Product Intelligence":[null,null,null,null,1,5,3],
- "Client Facing|Customer Experience & Marketing Strategy":[null,null,null,null,2,6,15],
- "Client Facing|International Business Development":[null,null,null,null,2,null,4],
- "Client Facing|Sales":[null,null,null,null,6,34,57],
- "Client Facing|Sunbeam":[null,null,null,null,4,10,25],
- "Client Facing|Thailand Privilege Card":[null,null,null,null,1,3,3],
- "Client Facing|Value Management":[null,null,null,null,null,4,8],
- "Combat Sport|Brand & Marketing":[null,null,null,null,null,null,2],
- "Combat Sport|CEO Office":[null,null,null,null,null,null,1],
- "Combat Sport|Commercial & Sponsorship":[null,null,null,null,null,1,2],
- "Combat Sport|Corporate Strategy":[null,null,null,null,null,4,5],
- "Combat Sport|Destination":[null,null,null,null,2,7,3],
- "Combat Sport|Production":[null,null,null,null,1,6,17],
- "Combat Sport|Program Director":[null,null,null,null,null,1,2],
- "Combat Sport|Sport Marketing":[null,null,null,null,null,1,1],
- "Corporate Service|Accounting & Finance":[null,null,null,1,9,23,71],
- "Corporate Service|Executive Office (IR & ComSec)":[null,null,null,null,null,4,1],
- "Corporate Service|Executive Office (SBT)":[null,null,null,null,5,2,7],
- "Corporate Service|Information Technology":[null,null,null,null,null,4,11],
- "Corporate Service|Legal":[null,null,null,null,3,8,12],
- "Corporate Service|People - Admin":[null,null,null,null,3,7,24],
- "Corporate Service|People - HR":[null,null,null,null,3,17,17],
- "Corporate Service|People - Holding":[null,null,null,null,null,1,null],
- "Corporate Service|Purchasing":[null,null,null,null,4,5,6],
- "New Business|Entertainment Business":[null,null,null,null,1,5,10],
- "Operation|AI Strategic Initiative":[null,null,null,null,null,3,10],
- "Operation|Airport & Seven-Eleven Media":[null,null,null,null,10,25,62],
- "Operation|BD & Asset Management":[null,null,null,1,7,10,41],
- "Operation|Billboard":[null,null,null,null,12,22,64],
- "Operation|Construction":[null,null,null,null,null,3,6],
- "Operation|Digital":[null,null,null,null,25,71,201],
- "Operation|Operation":[null,null,null,null,1,3,1],
- "Operation|Operational Intelligence":[null,null,null,null,null,4,11],
- "Operation|Street":[null,null,null,null,14,18,79],
- "Sports Business|E-Sport":[null,null,null,null,null,3,11],
- "Sports Business|Sports - Account Management":[null,null,null,null,1,3,2],
- "Sports Business|Sports - Football":[null,null,null,null,1,3,16],
- "Sports Business|Sports - Government Relations":[null,null,null,null,2,2,13],
- "Sports Business|Sports - Sales":[null,null,null,null,1,3,5],
- "Sports Business|Sports Media & Communications":[null,null,null,null,5,13,31],
- "Sports Business|T-Sport":[null,null,null,null,2,3,18]
-};
-const CLMUNM=[null,null,null,5400,69390.83,87365.99,160440.9], CLMUNMC=[null,null,null,3,20,36,94];
-const clmOf=(k,src)=>{const a=[null,null,null,null,null,null,null];(LINK[k]||[k]).forEach(x=>{const v=src[x];if(v)for(let i=0;i<7;i++){if(v[i]!=null)a[i]=(a[i]||0)+v[i]}});return a};
+        // สร้าง Metric Card
+        function createMetricCard(label, value, unit) {
+            return `
+                <div class="card">
+                    <div class="metric">
+                        <div class="metric-label">${label}</div>
+                        <div class="metric-value">${value.toLocaleString('en-US')}</div>
+                        <div class="metric-unit">${unit}</div>
+                    </div>
+                </div>
+            `;
+        }
 
-/* ชื่อชั้น: Level 5 = VP, Level 6 = SVP (HR ยืนยัน) — ชั้น 7–9 ยังไม่ได้ตั้งชื่อ จึงรวมอยู่ใน "SVP ขึ้นไป" */
-const LEVELS=["Staff (1.x)","Senior (2.x)","Manager (3)","Sr. Manager (4)","VP (5)","SVP ขึ้นไป (6–9)"];
-const lvOf=k=>{const a=[0,0,0,0,0,0];(LINK[k]||[]).forEach(x=>{const v=LVL[x];if(v)for(let i=0;i<6;i++)a[i]+=v[i]});return a};
-const DEPTS=BUD.map(([bu,dept,hc])=>{const r=seed(bu+dept),base=hc[NM-1],lv=lvOf(bu+"|"+dept);
-  const resign=hc.map(h=>Math.round(h*(.008+r()*.026))),hires=hc.map(h=>Math.round(h*(.006+r()*.022)));
-  const male=Math.round(base*(.40+r()*.34)),contractor=Math.round(base*(.02+r()*.10));
-  return{bu,dept,base,hc,lv,act:lv.reduce((a,b)=>a+b,0),orphan:false,resign,hires,
-    male,female:base-male,contractor,permanent:base-contractor,
-    ot:hc.map((h,i)=>i===NM-1?null:Math.round(h*(.55+r()*1.1)*520*(.8+r()*.5))),
-    flex:hc.map((h,i)=>(i===0||i===NM-1)?null:Math.round(h*(520+r()*220))),
-    claim:clmOf(bu+"|"+dept,CLM),claimC:clmOf(bu+"|"+dept,CLMC)};
-}).concat(ORPHAN.map(k=>{const [bu,dept]=k.split("|"),lv=LVL[k];
-  return{bu,dept,base:0,hc:MONTHS.map(()=>null),lv,act:lv.reduce((a,b)=>a+b,0),orphan:true,
-    resign:MONTHS.map(()=>null),hires:MONTHS.map(()=>null),male:0,female:0,contractor:0,permanent:0,
-    ot:MONTHS.map(()=>null),flex:MONTHS.map(()=>null),claim:clmOf(k,CLM),claimC:clmOf(k,CLMC)};
-}));
-const BUS=[...new Set(DEPTS.map(d=>d.bu))];
-const buLbl=b=>BULABEL[b]||b;
-const dpLbl=d=>DEPTLABEL[d.bu+"|"+d.dept]||d.dept+(d.orphan?" (ไม่มี budget)":"");
-const SRC=[{k:"👥 Manpower (budget)",as:"ก.ค. 2026",st:"ok"},{k:"🚪 Turnover",as:"ก.ค. 2026",st:"ok"},
- {k:"🎁 Flex Benefit",as:"มิ.ย. 2026",st:"late"},{k:"🏥 Group Insurance",as:"ก.ค. 2569",st:"ok"},
- {k:"⏱️ OT",as:"มิ.ย. 2026",st:"late"},{k:"📋 Absenteeism",as:"ยังไม่มีข้อมูล",st:"none"}];
+        // สร้าง Table
+        function createTable(title, data) {
+            if (!data || data.length === 0) return '';
+            
+            const headers = Object.keys(data[0]);
+            let html = `
+                <div class="table-container">
+                    <h2>${title}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                ${headers.map(h => `<th>${h}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // แสดง 10 แถวแรก
+            data.slice(0, 10).forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => {
+                    const value = row[header];
+                    html += `<td>${value !== null && value !== undefined ? value : '—'}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                    ${data.length > 10 ? `<p style="text-align: center; margin-top: 15px; color: #666; font-size: 12px;">แสดง 10 รายการแรก (รวม ${data.length} รายการ)</p>` : ''}
+                </div>
+            `;
+            
+            return html;
+        }
 
-const $=s=>document.querySelector(s);
-const giPrem=()=>{const e=document.getElementById("giPrem");return Math.max(1e6,(e&&+e.value)||GI.premFile)};
-const giTgt=()=>{const e=document.getElementById("giTgt");return Math.max(.01,((e&&+e.value)||70)/100)};
-const fmt=(n,d=0)=>n==null?"—":n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
-const pct=(c,p)=>(p==null||p===0||c==null)?null:(c-p)/p*100;
-const sum=(a,f)=>a.reduce((s,x)=>s+(f(x)||0),0);
-const pIdx=(a,i)=>{for(let j=i-1;j>=0;j--)if(a[j]!=null)return j;return -1};
-const lastIdx=(a,upto)=>{for(let i=upto;i>=0;i--)if(a[i]!=null)return i;return -1};
-
-/* NOTI */
-$("#bell").onclick=e=>{e.stopPropagation();$("#noti").classList.toggle("on")};
-document.addEventListener("click",e=>{if(!e.target.closest(".notiwrap"))$("#noti").classList.remove("on")});
-
-$("#rf").onclick=function(){const b=this;b.disabled=true;b.classList.add("spin");$("#rfTxt").textContent="⏳ กำลังดึง…";
-  setTimeout(()=>{b.disabled=false;b.classList.remove("spin");$("#rfTxt").textContent="🔄 ดึงข้อมูลล่าสุด";stamp();render()},1100)};
-function stamp(){$("#pulled").textContent=new Date().toLocaleString("th-TH",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
-
-const fM=$("#fMonth"),fB=$("#fBU"),fD=$("#fDept"),fS=$("#fSal");
-MONTHS.forEach((m,i)=>fM.add(new Option(m+" 2026",i)));fM.value=NM-1;
-fB.add(new Option("ทุกหน่วยงาน","all"));BUS.forEach(b=>fB.add(new Option(buLbl(b),b)));
-function fillDept(){const bu=fB.value;fD.innerHTML="";fD.add(new Option("ทุกแผนก","all"));
-  DEPTS.filter(d=>bu==="all"||d.bu===bu).forEach(d=>fD.add(new Option(dpLbl(d),d.bu+"|"+d.dept)))}
-fillDept();
-fB.onchange=()=>{fillDept();render()};
-fM.onchange=fD.onchange=render;fS.oninput=render;
-
-/* TREND TABS */
-const METRICS=[
- {id:"hc",  n:"👥 Manpower",    u:"คน",        f:v=>fmt(v),           inv:false,c:"#0F2137",sub:"อัตรากำลังที่ตั้งงบไว้ (budget) ณ สิ้นเดือน"},
- {id:"to",  n:"🚪 Turnover",     u:"%",         f:v=>v.toFixed(2)+"%", inv:true, c:"#AE1F16",sub:"อัตราลาออกต่อเดือน"},
- {id:"ot",  n:"⏱️ OT",          u:"บาท",       f:v=>fmt(v),           inv:true, c:"#B0741A",sub:"ค่าล่วงเวลารวม"},
- {id:"flex",n:"🎁 Flex Benefit", u:"บาท",       f:v=>fmt(v),           inv:false,c:"#0B7A63",sub:"ยอดเบิกใช้"},
- {id:"claim",n:"🏥 Group Insurance",u:"บาท",      f:v=>fmt(v),           inv:true, c:"#AE1F16",sub:"ยอดเคลมประกันสุขภาพ PB Group ไม่รวม Hello (ปีกรมธรรม์เริ่ม 12 เม.ย. 69)"},
- {id:"abs", n:"📋 Absenteeism",  u:"—",         f:v=>"—",              inv:true, c:"#7A8798",sub:"",dis:true}
-];
-let curMetric="hc",curView="mo";
-/* ยอดสะสม: บวกสะสมข้ามเดือน ข้ามเดือนที่ยังไม่มีข้อมูล (null) ไปโดยไม่นับเป็นศูนย์ */
-const cumsum=a=>{let last=-1;a.forEach((v,i)=>{if(v!=null)last=i});
-  let t=null;return a.map((v,i)=>{if(i>last)return null;      /* เดือนที่ยังไม่ได้รับข้อมูล ไม่ลากเส้นสะสมต่อ */
-    if(v==null)return t;t=(t||0)+v;return t})};
-/* Turnover เป็นอัตราส่วน บวกสะสมไม่ได้ */
-const CUMOK={hc:false,to:false,ot:true,flex:true,claim:true,abs:false};
-$("#tabs").innerHTML=METRICS.map(m=>
- `<button class="tab ${m.id===curMetric?"on":""}" data-m="${m.id}" ${m.dis?`disabled title="${m.dtitle||"ยังไม่มีข้อมูล"}"`:""}>${m.n}</button>`).join("");
-$("#tabs").onclick=e=>{const b=e.target.closest(".tab");if(!b||b.disabled)return;
-  curMetric=b.dataset.m;[...document.querySelectorAll("#tabs .tab")].forEach(t=>t.classList.toggle("on",t===b));render()};
-$("#vmode").onclick=e=>{const b=e.target.closest(".tab");if(!b||b.disabled)return;
-  curView=b.dataset.v;[...document.querySelectorAll("#vmode .tab")].forEach(t=>t.classList.toggle("on",t===b));render()};
-
-function donut(el,segs){const C=59,R=42,W=17;let a=-Math.PI/2,out="";
-  const tot=segs.reduce((s,x)=>s+x.v,0)||1;
-  segs.forEach(s=>{const ang=s.v/tot*Math.PI*2,e=a+ang,lg=ang>Math.PI?1:0;
-    out+=`<path d="M${(C+R*Math.cos(a)).toFixed(2)} ${(C+R*Math.sin(a)).toFixed(2)} A${R} ${R} 0 ${lg} 1 ${(C+R*Math.cos(e)).toFixed(2)} ${(C+R*Math.sin(e)).toFixed(2)}" fill="none" stroke="${s.c}" stroke-width="${W}"/>`;a=e});
-  out+=`<text x="${C}" y="${C+2}" text-anchor="middle" font-family="Tahoma" font-size="19" font-weight="700" fill="#0F2137">${fmt(tot)}</text>
-        <text x="${C}" y="${C+16}" text-anchor="middle" font-family="Tahoma" font-size="8.5" fill="#7A8798">คน</text>`;
-  document.getElementById(el).innerHTML=out}
-function legend(el,segs,tot){document.getElementById(el).innerHTML=segs.map(s=>
-  `<div class="dl"><i style="background:${s.c}"></i>${s.n}<b>${fmt(s.v)}</b><s>${(s.v/tot*100).toFixed(1)}%</s></div>`).join("")}
-function barRow(items,vf){const mx=Math.max(...items.map(i=>i.v))||1;
-  return items.map(i=>{const d=i.d,cls=d==null?"fl0":(i.inv?(d>0?"up":d<0?"dn":"fl0"):(d>0?"dn":d<0?"up":"fl0"));
-    const ar=d==null?"":(d>0?"▲":d<0?"▼":"—");
-    return`<div class="bar ${i.cls||""}"><u title="${i.n}">${i.n}</u>
-      <div class="tr"><div class="fi" style="width:${(i.v/mx*100).toFixed(1)}%"></div></div>
-      <div class="rt"><b>${vf(i.v)}</b><s class="${cls}">${d==null?"·":ar+Math.abs(d).toFixed(1)+"%"}</s></div></div>`}).join("")}
-
-function render(){
-  $("#ledger").innerHTML=SRC.map(s=>`<div class="lg"><u>${s.k}</u><b><i class="dot ${s.st}"></i>${s.as}</b></div>`).join("");
-  const mi=+fM.value,bu=fB.value,dk=fD.value;
-  let rows=DEPTS.filter(d=>bu==="all"||d.bu===bu);
-  if(dk!=="all")rows=rows.filter(d=>d.bu+"|"+d.dept===dk);
-  const scope=dk!=="all"?(DEPTLABEL[dk]||dk.split("|")[1]):(bu!=="all"?buLbl(bu):"ทั้งองค์กร");
-  $("#hlScope").textContent=scope+" · "+MONTHS[mi]+" 2026 · "+rows.length+" แผนก";
-  $("#recCount").textContent=rows.length+" แผนก / "+fmt(sum(rows,r=>r.hc[mi]))+" คน (budget) · "+fmt(sum(rows,r=>r.act))+" คน (actual)";
-
-  /* Job Level / Actual headcount — มาจาก LVL (ข้อมูลรายคนใน Master_Emp) ผ่าน LINK ไม่คำนวณจาก budget */
-  const LVn=LEVELS.map((_,i)=>sum(rows,r=>r.lv[i])),LVt=LVn.reduce((a,b)=>a+b,0);
-
-  const agg=k=>MONTHS.map((_,i)=>rows.some(r=>r[k][i]!=null)?sum(rows,r=>r[k][i]):null);
-  const HC=agg("hc"),RS=agg("resign"),HR=agg("hires"),OT=agg("ot"),FX=agg("flex");
-  /* เคลม 33 เคสของบริษัทในเครือที่ไม่อยู่ใน Master_Emp แยกแผนกไม่ได้ — นับรวมเฉพาะตอนดูทั้งองค์กร */
-  const wholeOrg=(bu==="all"&&dk==="all");
-  const CL=agg("claim").map((v,i)=>{const u=wholeOrg?CLMUNM[i]:null;
-    return (v==null&&u==null)?null:(v||0)+(u||0)});
-  const CLC=agg("claimC").map((v,i)=>{const u=wholeOrg?CLMUNMC[i]:null;
-    return (v==null&&u==null)?null:(v||0)+(u||0)});
-  const CLcum=CL.slice(0,mi+1).reduce((t,v)=>v==null?t:t+v,0);
-  const CLcases=CLC.slice(0,mi+1).reduce((t,v)=>v==null?t:t+v,0);
-  const TO=HC.map((h,i)=>h?RS[i]/h*100:null);
-  const cut=a=>a.slice(0,mi+1);
-
-  const iHC=lastIdx(cut(HC),mi),iOT=lastIdx(cut(OT),mi),iFX=lastIdx(cut(FX),mi),iCL=lastIdx(cut(CL),mi);
-  const g=(a,i)=>i>=0?a[i]:null, gp=(a,i)=>i>=0?a[pIdx(a,i)]:null;
-  const hcV=g(HC,iHC),hcP=gp(HC,iHC),toV=g(TO,iHC),toP=gp(TO,iHC);
-  const otV=g(OT,iOT),otP=gp(OT,iOT),fxV=g(FX,iFX),fxP=gp(FX,iFX),clV=g(CL,iCL),clP=gp(CL,iCL);
-
-  const K=o=>{
-    if(o.empty)return`<article class="kpi s-none"><div class="kt"><span class="kn">${o.n}</span><span class="ka">รอข้อมูล</span></div>
-      <div class="kempty"><p>${o.msg}</p><span class="mini">${o.cta}</span></div>
-      <div class="ksrc"><span>${o.f}</span><span>—</span></div></article>`;
-    const good=o.inv?(o.d<0):(o.d>0);
-    const chip=o.chipTxt?`<span class="chip ${o.chipCls||"n"}">${o.chipTxt}</span>`:o.d==null?`<span class="chip n">ไม่มีเดือนก่อนให้เทียบ</span>`:
-      `<span class="chip ${o.d===0?"n":good?"g":"r"}">${o.d>0?"▲":o.d<0?"▼":"—"} ${Math.abs(o.d).toFixed(1)}% <em>MoM</em></span>`;
-    const prev=o.pv==null?"":`<span class="kprev">${o.pm} = ${o.pf}</span>`;
-    return`<article class="kpi s-${o.s}"><div class="kt"><span class="kn">${o.n}</span><span class="ka">${o.as}</span></div>
-      <div class="kv"><span class="num">${o.v}</span><span class="ku">${o.u}</span></div>
-      <div class="krow">${chip}${prev}</div>
-      <div class="ksrc"><span>${o.f}</span><span>${o.note||""}</span></div></article>`};
-
-  const pm=i=>{const p=pIdx(HC,i);return p>=0?MONTHS[p]:""};
-  $("#kpis").innerHTML=[
-   K({n:"👥 Manpower (budget)",as:MONTHS[iHC]+" 2026",v:fmt(hcV),u:"คน",d:pct(hcV,hcP),inv:false,s:"good",
-      pv:hcP,pm:pm(iHC),pf:fmt(hcP)+" คน",f:"01 Master_Headcount",
-      note:!LVt?"Actual —":"Actual "+fmt(LVt)+" คน"+(hcV?" ("+(LVt/hcV*100).toFixed(1)+"%)":" · ไม่มีแถว budget")}),
-   K({n:"🚪 Turnover",as:MONTHS[iHC]+" 2026",v:toV?toV.toFixed(2):"—",u:"% ต่อเดือน",d:pct(toV,toP),inv:true,
-      s:toV>2?"act":toV>1.4?"watch":"good",pv:toP,pm:pm(iHC),pf:toP?toP.toFixed(2)+"%":"—",
-      f:"02 Master_Emp",note:fmt(RS[iHC])+" ออก / "+fmt(HR[iHC])+" เข้า"}),
-   K({n:"⏱️ OT",as:iOT>=0?MONTHS[iOT]+" 2026":"—",v:fmt(otV),u:"บาท",d:pct(otV,otP),inv:true,s:"watch",
-      pv:otP,pm:iOT>=0?MONTHS[pIdx(OT,iOT)]:"",pf:fmt(otP)+" บาท",f:"05 Master_OT",note:"ยังไม่รวม Combat Sport"}),
-   K({n:"📋 Absenteeism",empty:true,f:"06 Master_TimeAttendant",msg:"ยังไม่มีข้อมูลขาดงานเข้าระบบ KPI นี้จึงคำนวณไม่ได้",cta:"รอ Time Attendance ส่งไฟล์"}),
-   K({n:"🎁 Flex Benefit",as:iFX>=0?MONTHS[iFX]+" 2026":"—",v:fmt(fxV/1000,1),u:"พันบาท",d:pct(fxV,fxP),inv:false,s:"good",
-      pv:fxP,pm:iFX>=0?MONTHS[pIdx(FX,iFX)]:"",pf:fmt(fxP/1000,1)+" พันบาท",f:"03 Master_Flex",note:"ยอดเบิกใช้"}),
-   (()=>{const prem=giPrem(),tgt=giTgt(),lr=GI.annual/prem;
-     return K({n:"🏥 Group Insurance",as:"สะสมถึง "+MONTHS[mi]+" 2026",v:fmt(CLcum/1e6,3),u:"ล้านบาท",inv:true,
-      s:!wholeOrg?"watch":lr>tgt?"act":lr>tgt*.75?"watch":"good",pv:null,
-      chipTxt:wholeOrg?"LR คาดการณ์ "+(lr*100).toFixed(1)+"% / target "+(tgt*100).toFixed(0)+"%"
-        :(GI.amount?(CLcum/GI.amount*100).toFixed(1):"0")+"% ของเคลมทั้งองค์กร",
-      chipCls:wholeOrg?(lr>tgt?"r":"g"):"n",
-      f:"07 Health_Claims_Track_Sheet as of July",note:fmt(CLcases)+" เคส · เดือนล่าสุด "+fmt(g(CL,lastIdx(cut(CL),mi)))+" บาท"})})()
-  ].join("");
-
-  /* TREND */
-  const M=METRICS.find(m=>m.id===curMetric);
-  const RAW={hc:HC,to:TO,ot:OT,flex:FX,claim:CL,abs:MONTHS.map(()=>null)}[curMetric];
-  const canCum=CUMOK[curMetric],cum=canCum&&curView==="cum";
-  [...document.querySelectorAll("#vmode .tab")].forEach(t=>{t.disabled=!canCum&&t.dataset.v==="cum";
-    t.title=canCum?"":"ตัวชี้วัดนี้เป็นอัตราส่วน/ยอดคงเหลือ บวกสะสมไม่ได้"});
-  if(!canCum&&curView==="cum"){[...document.querySelectorAll("#vmode .tab")].forEach(t=>t.classList.toggle("on",t.dataset.v==="mo"))}
-  else{[...document.querySelectorAll("#vmode .tab")].forEach(t=>t.classList.toggle("on",t.dataset.v===curView))}
-  const SERIES=cum?cumsum(RAW):RAW;
-  $("#tSub").textContent=M.sub+" — "+scope+" · "+(cum?"ยอดสะสมตั้งแต่ต้นข้อมูล":"ยอดรายเดือน")+
-    " · แท่งเข้มคือเดือนที่เลือก · เส้นประคือยังไม่ได้รับข้อมูล";
-  const vals=SERIES.filter(v=>v!=null),mx=Math.max(...vals,1),mn=Math.min(...vals);
-  const lo=Math.max(0,mn-(mx-mn)*.8);
-  $("#cols").innerHTML=MONTHS.map((mo,i)=>{
-    const v=SERIES[i],nd=v==null;
-    const h=nd?26:Math.max(6,((v-lo)/((mx-lo)||1))*100);
-    const p=pIdx(SERIES,i),d=(!nd&&p>=0)?pct(v,SERIES[p]):null;
-    const dc=d==null?"fl0":(M.inv?(d>0?"up":d<0?"dn":"fl0"):(d>0?"dn":d<0?"up":"fl0"));
-    return`<div class="col ${i===mi?"cur":""} ${nd?"nd":""}">
-      <div class="cv">${nd?"ไม่มีข้อมูล":M.f(v)}</div>
-      <div class="cb" style="height:${h.toFixed(1)}%;${(!nd&&i===mi)?"background:"+M.c:""}"></div>
-      <div class="cm">${mo}</div>
-      <div class="cd ${dc}">${d==null?"·":(d>0?"▲":d<0?"▼":"—")+Math.abs(d).toFixed(1)+"%"}</div></div>`}).join("");
-
-  /* OT gauge */
-  const sal=Math.max(1000,+fS.value||35000),payroll=(HC[iOT>=0?iOT:iHC]||0)*sal;
-  const ratio=(otV&&payroll)?otV/payroll*100:null;
-  $("#otAs").textContent=iOT>=0?MONTHS[iOT]+" 2026":"—";
-  $("#otPct").textContent=ratio==null?"—":ratio.toFixed(2)+"%";
-  $("#otFill").style.width=Math.min(100,(ratio||0)/10*100).toFixed(1)+"%";
-  $("#otLimit").style.left="50%";
-  $("#otTrack").classList.toggle("over",ratio>5);
-  $("#otLimLbl").textContent="เส้นควบคุม 5% = "+fmt(payroll*.05)+" บาท";
-  const vd=$("#otVerdict");
-  if(ratio==null){vd.className="gverdict";vd.textContent="ยังไม่มีข้อมูล OT ของเดือนที่เลือก"}
-  else if(ratio<=5){vd.className="gverdict ok";vd.innerHTML=`<b>อยู่ในการควบคุม</b> — ใช้ไป ${fmt(otV)} บาท จากเพดาน ${fmt(payroll*.05)} บาท (เหลือ ${fmt(payroll*.05-otV)} บาท)`}
-  else{vd.className="gverdict no";vd.innerHTML=`<b>เกินเส้นควบคุม</b> — ใช้ไป ${fmt(otV)} บาท เกินเพดาน ${fmt(otV-payroll*.05)} บาท`}
-
-  /* structure — ปันส่วนตามอัตรากำลังของเดือนที่เลือก ยอดรวมจึงตรงกับ KPI Manpower */
-  const split=(r,parts,i)=>{const tot=parts.reduce((s,v)=>s+v,0)||1,n=r.hc[i]||0;
-    const raw=parts.map(v=>v/tot*n),out=raw.map(v=>Math.floor(v));
-    let left=n-out.reduce((s,v)=>s+v,0);
-    raw.map((v,k)=>[v-out[k],k]).sort((a,b)=>b[0]-a[0]).forEach(([,k])=>{if(left>0){out[k]++;left--}});
-    return out};
-  const part=(sel,i)=>{const z=rows.length?sel(rows[0]).map(()=>0):[];
-    return rows.reduce((acc,r)=>{const s=split(r,sel(r),i);return acc.map((v,k)=>v+s[k])},z)};
-  const [Ml,Fm]=part(r=>[r.male,r.female],iHC),TG=Ml+Fm;
-  const [Pm,Ct]=part(r=>[r.permanent,r.contractor],iHC),TT=Pm+Ct;
-  $("#gTot").textContent=fmt(TG)+" คน";$("#tTot").textContent=fmt(TT)+" คน";
-  const gs=[{n:"ชาย",v:Ml,c:"#2C5F8A"},{n:"หญิง",v:Fm,c:"#E39B7B"}];
-  const ts=[{n:"Permanent",v:Pm,c:"#0F2137"},{n:"Contractor",v:Ct,c:"#B8912A"}];
-  donut("dGender",gs);legend("lGender",gs,TG||1);donut("dType",ts);legend("lType",ts,TT||1);
-
-  if(!LVt){
-    $("#lvTot").textContent="ไม่มีข้อมูล";
-    $("#lvSub").textContent="โครงสร้างชั้นบังคับบัญชา";
-    $("#lvlBars").innerHTML=`<p class="lvnone">ไม่พบพนักงาน Active ของขอบเขตนี้ใน Master_Emp — แถวนี้มีแต่ budget ยังไม่มีแผนกฝั่ง actual ที่จับคู่ไว้</p>`;
-  }else{
-    $("#lvTot").textContent=fmt(LVt)+" คน";
-    $("#lvSub").textContent="โครงสร้างชั้นบังคับบัญชา — คนที่มีอยู่จริง (actual) ไม่ใช่ budget · snapshot ไม่แปรตามเดือนที่เลือก";
-    $("#lvlBars").innerHTML=barRow(LEVELS.map((n,i)=>({n,v:LVn[i],d:null})),v=>fmt(v)+" คน ("+(LVt?(v/LVt*100).toFixed(1):"0.0")+"%)");
-  }
-  $("#lvSrc").textContent="ที่มา: "+LVSRC+" · จับคู่กับ budget ผ่าน Matching Budget&Actual Dept.xlsx";
-  const drill=(bu!=="all"||dk!=="all");
-  $("#hcTitle").textContent=drill?"อัตรากำลังรายแผนก":"อัตรากำลังรายหน่วยงาน";
-  $("#hcAs").textContent=MONTHS[iHC]+" 2026";
-  let hcI=drill?rows.map(r=>({n:dpLbl(r),v:r.hc[iHC]||0,d:pct(r.hc[iHC],r.hc[pIdx(r.hc,iHC)])}))
-    :BUS.map(b=>{const rs=DEPTS.filter(d=>d.bu===b),c=sum(rs,r=>r.hc[iHC]),p=sum(rs,r=>r.hc[iHC-1]);return{n:buLbl(b),v:c,d:pct(c,p)}});
-  hcI.sort((a,b)=>b.v-a.v);
-  $("#hcBars").innerHTML=barRow(hcI.slice(0,10),v=>fmt(v)+" คน");
-
-  $("#toTitle").textContent=drill?"อัตราการลาออกรายแผนก":"อัตราการลาออกรายหน่วยงาน";
-  $("#toAs").textContent=MONTHS[iHC]+" 2026";
-  const base=drill?rows.map(r=>({n:dpLbl(r),rs:r.resign[iHC],hc:r.hc[iHC],prs:r.resign[iHC-1],phc:r.hc[iHC-1]}))
-   :BUS.map(b=>{const rs=DEPTS.filter(d=>d.bu===b);return{n:buLbl(b),rs:sum(rs,r=>r.resign[iHC]),hc:sum(rs,r=>r.hc[iHC]),prs:sum(rs,r=>r.resign[iHC-1]),phc:sum(rs,r=>r.hc[iHC-1])}});
-  const avg=sum(DEPTS,r=>r.resign[iHC])/sum(DEPTS,r=>r.hc[iHC])*100;
-  const toI=base.map(x=>{const rt=x.hc?x.rs/x.hc*100:0,pr=x.phc?x.prs/x.phc*100:null;
-    return{n:x.n,v:rt,d:pct(rt,pr),inv:true,cls:rt>=avg*2?"hot":rt>avg?"warm":""}}).sort((a,b)=>b.v-a.v);
-  $("#toBars").innerHTML=barRow(toI.slice(0,10),v=>v.toFixed(2)+"%");
-
-  /* headline + noti */
-  const bits=[`อัตรากำลังตามงบ <b>${fmt(hcV)} คน</b>`];
-  if(LVt)bits.push(`มีอยู่จริง <b>${fmt(LVt)} คน</b>`);
-  if(pct(hcV,hcP)!=null)bits.push(`${pct(hcV,hcP)>=0?"เพิ่ม":"ลด"} <b>${Math.abs(pct(hcV,hcP)).toFixed(1)}%</b> MoM`);
-  if(toV!=null)bits.push(`ลาออก <b>${toV.toFixed(2)}%</b>`);
-  if(ratio!=null)bits.push(`OT <b>${ratio.toFixed(2)}%</b> ของฐานเงินเดือน`);
-  $("#hlText").innerHTML=scope+" — "+bits.join(" · ");
-
-  const A=[];
-  if(ratio!=null){
-    if(ratio<=5)A.push({s:"good",t:"OT",h:`ค่า OT อยู่ที่ <b>${ratio.toFixed(2)}%</b> ต่ำกว่าเส้นควบคุม 5%`,
-      d:`เหลือเพดาน ${fmt(payroll*.05-otV)} บาท · ยังไม่รวม 12 บริษัทของ Combat Sport`});
-    else A.push({s:"high",t:"OT",h:`ค่า OT <b>เกินเส้นควบคุม</b> ${ratio.toFixed(2)}% (เพดาน 5%)`,
-      d:`เกินมา ${fmt(otV-payroll*.05)} บาท — ดูรายแผนกเพื่อหาจุดที่กระจุก`});
-  }
-  const hot=toI.filter(t=>t.cls==="hot");
-  if(hot.length)A.push({s:"high",t:"TURNOVER",h:`<b>${hot[0].n}</b> ลาออก ${hot[0].v.toFixed(2)}% สูงกว่าค่าเฉลี่ย (${avg.toFixed(2)}%) เกิน 2 เท่า`,
-    d:hot.length>1?`อีก ${hot.length-1} หน่วยงานอยู่ในเกณฑ์เดียวกัน`:"เจาะดูรายแผนกก่อนสิ้นไตรมาส"});
-  {const prem=giPrem(),tgt=giTgt(),lr=GI.annual/prem;
-   A.push(lr>tgt
-    ?{s:"high",t:"INSURANCE",h:`loss ratio คาดการณ์ <b>${(lr*100).toFixed(1)}%</b> ทะลุ target ${(tgt*100).toFixed(0)}%`,
-      d:`เคลมสะสม ${fmt(GI.amount)} บาท ใน ${GI.days} วันแรกของปีกรมธรรม์`}
-    :{s:lr>tgt*.75?"high":"good",t:"INSURANCE",h:`loss ratio คาดการณ์ <b>${(lr*100).toFixed(1)}%</b> จาก target ${(tgt*100).toFixed(0)}%`,
-      d:`เคลมสะสม ${fmt(GI.amount)} บาท (${GI.nClaims} เคส) ใน ${GI.days} วันแรก — ฐานยังสั้น ตัวเลขผันผวนได้มาก`});}
-  A.push({s:"info",t:"ABSENTEEISM",h:`KPI ตัวที่ 6 <b>ยังเปิดใช้ไม่ได้</b>`,d:"ไม่มีข้อมูลขาดงาน กระทบเกณฑ์ MVP ที่ต้องครบ 6 KPIs"});
-
-  const urgent=A.filter(a=>a.s==="high").length;
-  const bd=$("#badge");bd.textContent=A.length;
-  bd.className="badge"+(A.length===0?" z":(urgent?"":" q"));
-  $("#nCount").textContent=A.length+" เรื่อง";
-  $("#nlist").innerHTML=A.map(a=>`<div class="ni sev-${a.s}"><span class="tag">${a.t}</span><p>${a.h}<i>${a.d}</i></p></div>`).join("");
-}
-
-/* ── Group Insurance monitor ─────────────────────────────────────────────── */
-const giP=$("#giPrem"),giT=$("#giTgt"),giF=$("#giFac");
-const FACTORS=[1,1.5,2,3,4,5,6,8];
-function giRender(){
-  const prem=giPrem(), tgt=giTgt(), fac=+giF.value||1;
-  const cap=prem*tgt, proj=GI.annual*fac, lr=proj/prem, lrNow=GI.amount/prem;
-  $("#giFacL").textContent="×"+fac.toFixed(1);
-  $("#giAs").textContent="as of "+GI.asof;
-  $("#giLR").textContent=(lr*100).toFixed(1)+"%";
-  const scale=v=>Math.min(100,v*100);
-  $("#giFill").style.width=scale(lr).toFixed(1)+"%";
-  $("#giAct").style.width=scale(lrNow).toFixed(1)+"%";   /* ส่วนสีเข้ม = เคลมจริงถึงวันนี้ ไม่ขยับตามสมมติฐาน */
-  $("#giLimit").style.left=Math.min(100,tgt*100).toFixed(1)+"%";
-  $("#giTgtL").textContent="target "+(tgt*100).toFixed(0)+"%";
-  $("#giTrack").classList.toggle("over",lr>tgt);
-
-  $("#giCum").textContent=fmt(GI.amount)+" บาท";
-  $("#giCumS").textContent=GI.nClaims+" เคส · "+(GI.amount/cap*100).toFixed(2)+"% ของเพดาน · ผ่านไป "+GI.days+" วัน";
-  $("#giCap").textContent=fmt(cap)+" บาท";
-  $("#giCapS").textContent="เบี้ย "+fmt(prem/1e6,2)+" ล้าน × target "+(tgt*100).toFixed(0)+"%";
-  $("#giProj").textContent=fmt(proj)+" บาท";
-  $("#giProjS").textContent=(fac===1?"ยืดอัตราเฉลี่ยสะสม "+GI.days+" วัน":"อัตราเฉลี่ยสะสม × "+fac.toFixed(1))+
-    " · ถ้าใช้อัตราเดือนล่าสุดอย่างเดียว = "+fmt(GI.annualLast*fac)+" บาท (LR "+(GI.annualLast*fac/prem*100).toFixed(0)+"%)";
-  const brk=GI.annual?cap/GI.annual:null;
-  $("#giBreak").textContent=brk==null?"—":"×"+brk.toFixed(1);
-  $("#giBreakS").textContent=brk==null?"":"อัตราเคลมต้องแรงกว่าปัจจุบัน "+brk.toFixed(1)+" เท่า ถึงจะชนเพดาน";
-
-  const vd=$("#giVerdict");
-  if(lr>tgt){vd.className="gverdict no";
-    vd.innerHTML=`<b>ทะลุ target</b> — คาดการณ์ ${(lr*100).toFixed(1)}% เกิน ${(tgt*100).toFixed(0)}% อยู่ ${fmt(proj-cap)} บาท`}
-  else if(lr>tgt*.75){vd.className="gverdict";
-    vd.innerHTML=`<b>ต้องเฝ้าดู</b> — คาดการณ์ ${(lr*100).toFixed(1)}% เข้าใกล้ target ${(tgt*100).toFixed(0)}% เหลือช่องว่าง ${fmt(cap-proj)} บาท`}
-  else{vd.className="gverdict ok";
-    vd.innerHTML=`<b>ยังไม่ทะลุ target</b> — คาดการณ์ ${(lr*100).toFixed(1)}% ต่ำกว่า target ${(tgt*100).toFixed(0)}% · เหลือช่องว่าง ${fmt(cap-proj)} บาท`}
-  if(GI.annualLast*fac>cap&&lr<=tgt)vd.innerHTML+=`<br><b>แต่เคลมกำลังเร่งตัว</b> — ถ้าเดินอัตราเคลมของเดือนล่าสุดต่อไป จะเป็น ${fmt(GI.annualLast*fac)} บาท (LR ${(GI.annualLast*fac/prem*100).toFixed(0)}%) ซึ่งทะลุเพดาน`;
-
-  const cols=[{n:"เบี้ยที่กรอก",p:prem},{n:fmt(GI.premFile/1e6,2)+" ล้าน · PB Group",p:GI.premFile},{n:"22.55 ล้าน · รวม Hello",p:22546700}];
-  const cls=v=>v>tgt?"no":v>tgt*.75?"warn":"ok";
-  $("#sensT").innerHTML=
-    "<thead><tr><th>อัตราเคลม</th><th>เคลมทั้งปี (บาท)</th>"+cols.map(c=>`<th>LR @ ${c.n}</th>`).join("")+"</tr></thead><tbody>"+
-    FACTORS.map(f=>{const pj=GI.annual*f;
-      return `<tr class="${Math.abs(f-fac)<.05?"now":""}"><td>×${f.toFixed(1)}</td><td>${fmt(pj)}</td>`+
-        cols.map(c=>{const v=pj/c.p;return `<td class="lr ${cls(v)}">${(v*100).toFixed(1)}%</td>`}).join("")+"</tr>"}).join("")+
-    "</tbody>";
-  $("#sensSub").textContent="target "+(tgt*100).toFixed(0)+"% · แถวไฮไลต์คือค่าที่ตั้งอยู่";
-
-  $("#snapRow").innerHTML=GI.snaps.map((sn,i)=>{
-    const v=sn.amount/sn.earned;                       /* LR เทียบ earned premium ตามที่ไฟล์คำนวณ */
-    const inc=sn.amount-(i?GI.snaps[i-1].amount:0);
-    const c=v>tgt?"var(--alert)":v>tgt*.75?"var(--warn)":"var(--good)";
-    const d=i?(v-GI.snaps[i-1].amount/GI.snaps[i-1].earned)*100:null;
-    return `<div class="snap"><u>${sn.asof}</u>
-      <div class="lrv" style="color:${c}">${(v*100).toFixed(1)}%${d==null?"":`<em>▲ ${d.toFixed(1)} pp</em>`}</div>
-      <div class="mini"><i style="width:${Math.min(100,v/tgt*100).toFixed(1)}%;background:${c}"></i></div>
-      <s>สะสม ${fmt(sn.amount)} บาท · ${fmt(sn.cases)} เคส<br>เพิ่มจากรอบก่อน ${fmt(inc)} บาท</s></div>`}).join("");
-  $("#giSrc").textContent="ที่มา: "+GI.src+" · ขอบเขต "+GI.scope+" · ปีกรมธรรม์ "+GI.policy+" · เบี้ยในไฟล์ "+fmt(GI.premFile)+" บาท target "+(GI.tgtFile*100).toFixed(0)+"%";
-}
-giP.oninput=giT.oninput=()=>{giRender();render()};giF.oninput=giRender;
-$("#giReset").onclick=()=>{giP.value=GI.premFile;giT.value=(GI.tgtFile*100).toFixed(0);giF.value=1;giRender();render()};
-giRender();
-
-stamp();render();
-</script>
+        // Load data on page load
+        window.addEventListener('load', refreshData);
+    </script>
 </body>
 </html>
